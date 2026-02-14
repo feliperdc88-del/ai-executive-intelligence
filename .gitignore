@@ -1,0 +1,15 @@
+.vercel
+node_modules
+.env
+.env.local
+*.log
+.DS_Store
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.vercel-url
+.gcloud-project
+.oauth-client-id
+DEPLOY_SUMMARY.txt

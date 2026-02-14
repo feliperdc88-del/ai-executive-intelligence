@@ -1,0 +1,22 @@
+{
+  "name": "ai-executive-intelligence",
+  "version": "1.0.0",
+  "description": "AI-powered executive intelligence system with automatic Google Drive sync",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python3 -m http.server 8000",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "ai",
+    "executive",
+    "intelligence",
+    "meetings",
+    "transcriptions",
+    "google-drive",
+    "claude",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT"
+}

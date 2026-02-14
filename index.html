@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Executive Intelligence - Auto-Sync Drive</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #0F172A;
+            --secondary: #1E293B;
+            --accent: #3B82F6;
+            --accent-bright: #60A5FA;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --text: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border: #334155;
+            --card-bg: #1E293B;
+            
+            --theme-cx: #8B5CF6;
+            --theme-pagamentos: #EC4899;
+            --theme-startse: #F59E0B;
+            --theme-negocios: #10B981;
+            --theme-carreira: #3B82F6;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 2rem;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, var(--accent-bright), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .badge-primary {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--accent-bright);
+        }
+
+        /* Config Section */
+        .config-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .config-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            padding: 2rem;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-input.mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+        }
+
+        .form-help {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .form-help a {
+            color: var(--accent-bright);
+            text-decoration: none;
+        }
+
+        .form-help a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            padding: 0.75rem 1.5rem;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.95rem;
+            width: 100%;
+        }
+
+        button:hover:not(:disabled) {
+            background: var(--accent-bright);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-success {
+            background: var(--success);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            background: #059669;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: #dc2626;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        }
+
+        /* Connection Status */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .connection-status.connected {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+        }
+
+        .connection-status.disconnected {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--danger);
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: var(--success);
+        }
+
+        .status-dot.disconnected {
+            background: var(--danger);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .status-text {
+            flex: 1;
+        }
+
+        .status-label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-detail {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Sync Info */
+        .sync-info {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .sync-stat {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .sync-stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+        }
+
+        .sync-stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Files List */
+        .files-section {
+            margin-bottom: 2rem;
+        }
+
+        .files-grid {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .file-item {
+            background: var(--card-bg);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .file-item:hover {
+            border-color: var(--accent);
+            transform: translateX(4px);
+        }
+
+        .file-item.new {
+            border-color: var(--success);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex: 1;
+        }
+
+        .file-icon {
+            font-size: 1.5rem;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .file-meta {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .theme-tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .file-status {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        /* Auto-sync Toggle */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+
+        .toggle-label {
+            font-weight: 600;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--border);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active {
+            background: var(--success);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(30px);
+        }
+
+        /* Loading States */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+        }
+
+        .results-section.visible {
+            display: block;
+        }
+
+        .insight-item {
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+            transition: all 0.3s ease;
+        }
+
+        .insight-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+        }
+
+        .insight-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: var(--accent-bright);
+            font-size: 1.05rem;
+        }
+
+        .insight-content {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .insight-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .feedback-btn {
+            padding: 0.375rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .feedback-btn:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--text);
+        }
+
+        .feedback-btn.active-positive {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--success);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+            max-width: 400px;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast.error {
+            background: var(--danger);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+        }
+
+        /* Notes */
+        .notes-textarea {
+            width: 100%;
+            min-height: 120px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--text);
+            font-family: inherit;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: all 0.3s ease;
+        }
+
+        .notes-textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .notes-textarea::placeholder {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🧠 AI Executive Intelligence - Auto-Sync</h1>
+            <p class="subtitle">
+                Sincronização Automática com Google Drive
+                <span class="badge badge-success" id="syncBadge">⏸️ Sync Pausado</span>
+                <span class="badge badge-primary">🤖 Agentes Autônomos</span>
+            </p>
+        </header>
+
+        <!-- Configuration Section -->
+        <div class="config-section">
+            <!-- Google Drive Config -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">📁 Google Drive</h2>
+                    <span class="badge badge-warning">Configuração</span>
+                </div>
+
+                <div id="driveStatus" class="connection-status disconnected">
+                    <div class="status-dot disconnected"></div>
+                    <div class="status-text">
+                        <div class="status-label">Desconectado</div>
+                        <div class="status-detail">Conecte-se ao Google Drive para começar</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Pasta do Google Drive</label>
+                    <input 
+                        type="text" 
+                        id="driveFolderPath" 
+                        class="form-input" 
+                        placeholder="/Reuniões-AI/Transcrições/2026"
+                        value="/Reuniões-AI/Transcrições/2026">
+                    <div class="form-help">
+                        Caminho da pasta onde estão suas transcrições
+                    </div>
+                </div>
+
+                <button id="connectDriveBtn" onclick="connectGoogleDrive()">
+                    🔗 Conectar Google Drive
+                </button>
+
+                <div style="margin-top: 1rem;">
+                    <button id="disconnectDriveBtn" onclick="disconnectGoogleDrive()" class="btn-danger" style="display: none;">
+                        🔌 Desconectar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Claude API Config -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">🔑 Claude API</h2>
+                    <span class="badge badge-warning">Configuração</span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">API Key</label>
+                    <input 
+                        type="password" 
+                        id="apiKey" 
+                        class="form-input mono" 
+                        placeholder="sk-ant-api03-...">
+                    <div class="form-help">
+                        <a href="https://console.anthropic.com/settings/keys" target="_blank">Criar chave →</a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Auto-Processamento</label>
+                    <div class="toggle-container" onclick="toggleAutoProcess()">
+                        <span class="toggle-label">Processar novos arquivos automaticamente</span>
+                        <div id="autoProcessToggle" class="toggle-switch">
+                            <div class="toggle-slider"></div>
+                        </div>
+                    </div>
+                    <div class="form-help">
+                        Quando ativado, novos arquivos são processados automaticamente
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Intervalo de Sincronização</label>
+                    <select id="syncInterval" class="form-input">
+                        <option value="60">1 minuto (testes)</option>
+                        <option value="300" selected>5 minutos</option>
+                        <option value="900">15 minutos</option>
+                        <option value="1800">30 minutos</option>
+                        <option value="3600">1 hora</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sync Info -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <div class="card-header">
+                <h2 class="card-title">📊 Status da Sincronização</h2>
+                <button id="manualSyncBtn" onclick="manualSync()" disabled>
+                    🔄 Sincronizar Agora
+                </button>
+            </div>
+
+            <div class="sync-info">
+                <div class="sync-stat">
+                    <div class="sync-stat-value" id="totalFiles">0</div>
+                    <div class="sync-stat-label">Arquivos Total</div>
+                </div>
+                <div class="sync-stat">
+                    <div class="sync-stat-value" id="newFiles">0</div>
+                    <div class="sync-stat-label">Novos (Não Processados)</div>
+                </div>
+                <div class="sync-stat">
+                    <div class="sync-stat-value" id="lastSync">Nunca</div>
+                    <div class="sync-stat-label">Última Sincronização</div>
+                </div>
+            </div>
+
+            <div id="syncProgress" style="display: none; text-align: center; padding: 1rem;">
+                <div class="spinner" style="width: 30px; height: 30px; border-width: 2px;"></div>
+                <div style="color: var(--text-muted); font-size: 0.9rem;">Sincronizando com Google Drive...</div>
+            </div>
+        </div>
+
+        <!-- Files List -->
+        <div class="card files-section">
+            <div class="card-header">
+                <h2 class="card-title">📄 Transcrições</h2>
+                <span class="badge badge-primary" id="filesCount">0 arquivos</span>
+            </div>
+
+            <div id="filesList" class="files-grid">
+                <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                    Conecte-se ao Google Drive para ver suas transcrições
+                </div>
+            </div>
+        </div>
+
+        <!-- Notes Section -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <div class="card-header">
+                <h2 class="card-title">📝 Suas Anotações</h2>
+                <span class="badge badge-success">Auto-salvo</span>
+            </div>
+            <textarea 
+                id="notesArea" 
+                class="notes-textarea" 
+                placeholder="Adicione contexto, decisões, prioridades que mudaram..."></textarea>
+        </div>
+
+        <!-- Actions -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
+            <button id="processBtn" onclick="processAll()" disabled class="btn-success">
+                🤖 Processar Todos os Arquivos
+            </button>
+            <button id="weeklyBtn" onclick="runWeeklyMeeting()" disabled class="btn-success">
+                📅 Reunião Semanal
+            </button>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsSection" class="results-section">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">💡 Insights Gerados</h2>
+                    <span id="insightsCount" class="badge badge-success">0 insights</span>
+                </div>
+                <div id="insightsContainer"></div>
+            </div>
+
+            <div class="card" id="weeklyPlanCard" style="display: none; margin-top: 2rem;">
+                <div class="card-header">
+                    <h2 class="card-title">📅 Plano Semanal</h2>
+                </div>
+                <div id="weeklyPlanContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script>
+        // State
+        let driveConnected = false;
+        let autoProcessEnabled = false;
+        let syncIntervalId = null;
+        let files = [];
+        let processedInsights = [];
+        let userNotes = '';
+        let googleAccessToken = null;
+
+        // Google Drive Configuration
+        const GOOGLE_CLIENT_ID = 'YOUR_CLIENT_ID_HERE.apps.googleusercontent.com';
+        const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+
+        // Theme mapping
+        const THEMES = {
+            cx: { name: 'CX', icon: '🎧', color: '#8B5CF6' },
+            pagamentos: { name: 'Pagamentos Agentes', icon: '💳', color: '#EC4899' },
+            startse: { name: 'StartSe', icon: '🚀', color: '#F59E0B' },
+            negocios: { name: 'Novos Negócios', icon: '💼', color: '#10B981' },
+            carreira: { name: 'Sessão Carreira', icon: '📈', color: '#3B82F6' }
+        };
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings();
+            setupNotesAutoSave();
+            initGoogleDrive();
+        });
+
+        // Google Drive Integration
+        function initGoogleDrive() {
+            // Check if running locally (needs proper OAuth setup)
+            if (window.location.protocol === 'file:') {
+                showToast('⚠️ Para usar Google Drive, hospede em um servidor web (não file://)', 'warning');
+                enableDemoMode();
+                return;
+            }
+
+            // Initialize Google Identity Services
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleGoogleSignIn
+            });
+        }
+
+        function connectGoogleDrive() {
+            // For demo purposes, simulate connection
+            if (GOOGLE_CLIENT_ID.includes('YOUR_CLIENT_ID')) {
+                showToast('ℹ️ Modo Demo: Usando dados simulados. Configure CLIENT_ID para uso real.', 'warning');
+                enableDemoMode();
+                return;
+            }
+
+            // Real OAuth flow
+            const client = google.accounts.oauth2.initTokenClient({
+                client_id: GOOGLE_CLIENT_ID,
+                scope: SCOPES,
+                callback: (response) => {
+                    googleAccessToken = response.access_token;
+                    onDriveConnected();
+                }
+            });
+
+            client.requestAccessToken();
+        }
+
+        function handleGoogleSignIn(response) {
+            googleAccessToken = response.credential;
+            onDriveConnected();
+        }
+
+        function onDriveConnected() {
+            driveConnected = true;
+            updateDriveStatus(true);
+            showToast('✅ Conectado ao Google Drive!', 'success');
+            manualSync();
+            
+            // Start auto-sync if enabled
+            if (autoProcessEnabled) {
+                startAutoSync();
+            }
+        }
+
+        function disconnectGoogleDrive() {
+            driveConnected = false;
+            googleAccessToken = null;
+            stopAutoSync();
+            updateDriveStatus(false);
+            files = [];
+            updateFilesList();
+            showToast('🔌 Desconectado do Google Drive', 'success');
+        }
+
+        function updateDriveStatus(connected) {
+            const status = document.getElementById('driveStatus');
+            const dot = status.querySelector('.status-dot');
+            const label = status.querySelector('.status-label');
+            const detail = status.querySelector('.status-detail');
+            const connectBtn = document.getElementById('connectDriveBtn');
+            const disconnectBtn = document.getElementById('disconnectDriveBtn');
+            const manualSyncBtn = document.getElementById('manualSyncBtn');
+
+            if (connected) {
+                status.className = 'connection-status connected';
+                dot.className = 'status-dot connected';
+                label.textContent = 'Conectado';
+                detail.textContent = 'Sincronizando automaticamente';
+                connectBtn.style.display = 'none';
+                disconnectBtn.style.display = 'block';
+                manualSyncBtn.disabled = false;
+            } else {
+                status.className = 'connection-status disconnected';
+                dot.className = 'status-dot disconnected';
+                label.textContent = 'Desconectado';
+                detail.textContent = 'Conecte-se ao Google Drive para começar';
+                connectBtn.style.display = 'block';
+                disconnectBtn.style.display = 'none';
+                manualSyncBtn.disabled = true;
+            }
+        }
+
+        // Sync Functions
+        async function manualSync() {
+            if (!driveConnected) {
+                showToast('❌ Conecte-se ao Google Drive primeiro', 'error');
+                return;
+            }
+
+            document.getElementById('syncProgress').style.display = 'block';
+
+            try {
+                const folderPath = document.getElementById('driveFolderPath').value;
+                const newFiles = await fetchDriveFiles(folderPath);
+                
+                // Merge with existing, mark new ones
+                newFiles.forEach(file => {
+                    const exists = files.find(f => f.id === file.id);
+                    if (!exists) {
+                        file.isNew = true;
+                        files.push(file);
+                    }
+                });
+
+                updateFilesList();
+                updateStats();
+                updateLastSyncTime();
+
+                showToast(`✅ Sincronizado! ${newFiles.length} arquivo(s) encontrado(s)`, 'success');
+
+                // Auto-process if enabled
+                if (autoProcessEnabled) {
+                    const unprocessed = files.filter(f => !f.processed);
+                    if (unprocessed.length > 0) {
+                        processAll();
+                    }
+                }
+
+            } catch (error) {
+                console.error('Sync error:', error);
+                showToast('❌ Erro ao sincronizar: ' + error.message, 'error');
+            } finally {
+                document.getElementById('syncProgress').style.display = 'none';
+            }
+        }
+
+        async function fetchDriveFiles(folderPath) {
+            // Simulate API call for demo
+            if (!googleAccessToken || GOOGLE_CLIENT_ID.includes('YOUR_CLIENT_ID')) {
+                return generateDemoFiles();
+            }
+
+            // Real Google Drive API call
+            const response = await fetch(
+                `https://www.googleapis.com/drive/v3/files?q='${folderPath}' in parents and trashed=false&fields=files(id,name,modifiedTime,size)`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${googleAccessToken}`
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to fetch files from Drive');
+            }
+
+            const data = await response.json();
+            
+            // Download content for each file
+            const filesWithContent = await Promise.all(
+                data.files.map(async file => {
+                    const content = await fetchFileContent(file.id);
+                    return {
+                        id: file.id,
+                        name: file.name,
+                        content: content,
+                        size: file.size,
+                        modifiedTime: file.modifiedTime,
+                        theme: detectTheme(file.name),
+                        processed: false
+                    };
+                })
+            );
+
+            return filesWithContent;
+        }
+
+        async function fetchFileContent(fileId) {
+            const response = await fetch(
+                `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${googleAccessToken}`
+                    }
+                }
+            );
+
+            return await response.text();
+        }
+
+        function detectTheme(filename) {
+            const lower = filename.toLowerCase();
+            if (lower.includes('cx')) return 'cx';
+            if (lower.includes('pagamento')) return 'pagamentos';
+            if (lower.includes('startse')) return 'startse';
+            if (lower.includes('negocio')) return 'negocios';
+            if (lower.includes('carreira')) return 'carreira';
+            return 'geral';
+        }
+
+        // Auto-sync
+        function toggleAutoProcess() {
+            autoProcessEnabled = !autoProcessEnabled;
+            const toggle = document.getElementById('autoProcessToggle');
+            toggle.classList.toggle('active');
+
+            if (autoProcessEnabled && driveConnected) {
+                startAutoSync();
+                showToast('✅ Auto-processamento ativado', 'success');
+            } else {
+                stopAutoSync();
+                showToast('⏸️ Auto-processamento pausado', 'success');
+            }
+
+            updateSyncBadge();
+            saveSettings();
+        }
+
+        function startAutoSync() {
+            const interval = parseInt(document.getElementById('syncInterval').value) * 1000;
+            
+            stopAutoSync(); // Clear existing
+            
+            syncIntervalId = setInterval(() => {
+                console.log('Auto-sync triggered');
+                manualSync();
+            }, interval);
+
+            updateSyncBadge();
+        }
+
+        function stopAutoSync() {
+            if (syncIntervalId) {
+                clearInterval(syncIntervalId);
+                syncIntervalId = null;
+            }
+            updateSyncBadge();
+        }
+
+        function updateSyncBadge() {
+            const badge = document.getElementById('syncBadge');
+            if (autoProcessEnabled && driveConnected) {
+                badge.textContent = '🔄 Sync Ativo';
+                badge.className = 'badge badge-success';
+            } else {
+                badge.textContent = '⏸️ Sync Pausado';
+                badge.className = 'badge badge-warning';
+            }
+        }
+
+        // Update UI
+        function updateFilesList() {
+            const container = document.getElementById('filesList');
+            document.getElementById('filesCount').textContent = `${files.length} arquivo(s)`;
+
+            if (files.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                        ${driveConnected ? 'Nenhum arquivo encontrado na pasta especificada' : 'Conecte-se ao Google Drive para ver suas transcrições'}
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = files.map(file => {
+                const theme = THEMES[file.theme] || { icon: '📄', name: 'Geral', color: '#94A3B8' };
+                const statusIcon = file.processed ? '✅' : file.isNew ? '🆕' : '⏳';
+                const statusText = file.processed ? 'Processado' : file.isNew ? 'Novo' : 'Pendente';
+                
+                return `
+                    <div class="file-item ${file.isNew && !file.processed ? 'new' : ''}">
+                        <div class="file-info">
+                            <div class="file-icon">${theme.icon}</div>
+                            <div class="file-details">
+                                <div class="file-name">${file.name}</div>
+                                <div class="file-meta">
+                                    <span class="theme-tag" style="background: ${theme.color};">${theme.name}</span>
+                                    <span>${(file.size / 1024).toFixed(1)} KB</span>
+                                    <span>${new Date(file.modifiedTime || Date.now()).toLocaleDateString('pt-BR')}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="file-status">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">
+                                ${statusIcon} ${statusText}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('totalFiles').textContent = files.length;
+            document.getElementById('newFiles').textContent = files.filter(f => !f.processed).length;
+            
+            const hasUnprocessed = files.some(f => !f.processed);
+            const hasApiKey = document.getElementById('apiKey').value.trim().length > 0;
+            document.getElementById('processBtn').disabled = !hasUnprocessed || !hasApiKey;
+        }
+
+        function updateLastSyncTime() {
+            const now = new Date();
+            document.getElementById('lastSync').textContent = now.toLocaleTimeString('pt-BR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Demo Mode
+        function enableDemoMode() {
+            driveConnected = true;
+            updateDriveStatus(true);
+            files = generateDemoFiles();
+            updateFilesList();
+            updateStats();
+            updateLastSyncTime();
+        }
+
+        function generateDemoFiles() {
+            return [
+                {
+                    id: 'demo-1',
+                    name: 'reuniao-cx-nps-q4.txt',
+                    content: 'Demo content - CX meeting transcript...',
+                    size: 2048,
+                    modifiedTime: new Date().toISOString(),
+                    theme: 'cx',
+                    processed: false,
+                    isNew: true
+                },
+                {
+                    id: 'demo-2',
+                    name: 'sprint-planning-pagamentos.txt',
+                    content: 'Demo content - Payments sprint planning...',
+                    size: 3072,
+                    modifiedTime: new Date(Date.now() - 86400000).toISOString(),
+                    theme: 'pagamentos',
+                    processed: false,
+                    isNew: true
+                },
+                {
+                    id: 'demo-3',
+                    name: '1-1-ana-novos-negocios.txt',
+                    content: 'Demo content - Business development 1:1...',
+                    size: 1536,
+                    modifiedTime: new Date(Date.now() - 172800000).toISOString(),
+                    theme: 'negocios',
+                    processed: false,
+                    isNew: false
+                }
+            ];
+        }
+
+        // Process files
+        async function processAll() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            
+            if (!apiKey) {
+                showToast('❌ Adicione sua API key primeiro', 'error');
+                return;
+            }
+
+            const unprocessed = files.filter(f => !f.processed);
+            
+            if (unprocessed.length === 0) {
+                showToast('ℹ️ Todos os arquivos já foram processados', 'warning');
+                return;
+            }
+
+            showLoading(`Processando ${unprocessed.length} arquivo(s) com agentes autônomos...`);
+
+            try {
+                // Group by theme
+                const byTheme = {};
+                unprocessed.forEach(file => {
+                    if (!byTheme[file.theme]) byTheme[file.theme] = [];
+                    byTheme[file.theme].push(file);
+                });
+
+                // Run agents
+                const insights = await runAllAgents(apiKey, byTheme, userNotes);
+                
+                // Mark as processed
+                unprocessed.forEach(f => f.processed = true);
+                
+                processedInsights = insights;
+                displayInsights(insights);
+                
+                updateFilesList();
+                updateStats();
+                document.getElementById('resultsSection').classList.add('visible');
+                document.getElementById('weeklyBtn').disabled = false;
+                
+                showToast(`✅ ${unprocessed.length} arquivo(s) processado(s)! ${insights.length} insights gerados.`, 'success');
+                
+            } catch (error) {
+                console.error('Process error:', error);
+                showToast('❌ Erro ao processar: ' + error.message, 'error');
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Agents (simplified for demo)
+        async function runAllAgents(apiKey, transcriptsByTheme, notes) {
+            // Simplified version - in production, call real Claude API
+            // For now, return mock data
+            return [
+                {
+                    titulo: "Conexão: CX + Pagamentos - UX do Checkout",
+                    descricao: "Time de CX reportou problemas com checkout. Pagamentos está refatorando. Oportunidade de workshop conjunto.",
+                    tema: "conexao",
+                    prioridade: "alto",
+                    categoria: "oportunidade"
+                },
+                {
+                    titulo: "Bloqueio Crítico: API Pix atrasada 3 semanas",
+                    descricao: "Fornecedor não dá previsão. Impacta 2 squads. Escalar urgentemente.",
+                    tema: "pagamentos",
+                    prioridade: "critico",
+                    categoria: "bloqueio"
+                },
+                {
+                    titulo: "Oportunidade: Cliente precisa Split Payment",
+                    descricao: "Deal de 500k depende de feature em desenvolvimento. Acelerar entrega.",
+                    tema: "negocios",
+                    prioridade: "alto",
+                    categoria: "oportunidade"
+                }
+            ];
+        }
+
+        function displayInsights(insights) {
+            const container = document.getElementById('insightsContainer');
+            document.getElementById('insightsCount').textContent = `${insights.length} insights`;
+            
+            container.innerHTML = insights.map((insight, idx) => {
+                const theme = THEMES[insight.tema] || { icon: '🔗', name: insight.tema, color: '#94A3B8' };
+                const priorityColors = {
+                    critico: 'var(--danger)',
+                    alto: 'var(--warning)',
+                    medio: 'var(--accent)',
+                    baixo: 'var(--text-muted)'
+                };
+                
+                return `
+                    <div class="insight-item" style="border-color: ${priorityColors[insight.prioridade]}">
+                        <div class="insight-header">
+                            <div class="insight-title">${insight.titulo}</div>
+                            <span class="theme-tag" style="background: ${theme.color};">
+                                ${theme.icon} ${theme.name}
+                            </span>
+                        </div>
+                        <div class="insight-content">${insight.descricao}</div>
+                        <div class="insight-actions">
+                            <button class="feedback-btn" onclick="giveFeedback(${idx}, 'positive')">
+                                👍 Relevante
+                            </button>
+                            <button class="feedback-btn" onclick="giveFeedback(${idx}, 'action')">
+                                ✅ Ação tomada
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function giveFeedback(idx, type) {
+            const insight = processedInsights[idx];
+            if (!insight.feedback) insight.feedback = [];
+            insight.feedback.push({ type, timestamp: new Date().toISOString() });
+            
+            event.target.classList.add('active-positive');
+            showToast('✅ Feedback registrado!', 'success');
+        }
+
+        async function runWeeklyMeeting() {
+            // Simplified for demo
+            showToast('✅ Plano semanal gerado!', 'success');
+            document.getElementById('weeklyPlanCard').style.display = 'block';
+            document.getElementById('weeklyPlanContainer').innerHTML = `
+                <div style="padding: 1rem;">
+                    <h3>Resumo Executivo</h3>
+                    <p>Semana com 1 bloqueio crítico e 2 oportunidades importantes.</p>
+                </div>
+            `;
+        }
+
+        // Settings
+        function saveSettings() {
+            localStorage.setItem('drive_settings', JSON.stringify({
+                autoProcessEnabled,
+                folderPath: document.getElementById('driveFolderPath').value,
+                syncInterval: document.getElementById('syncInterval').value
+            }));
+        }
+
+        function loadSettings() {
+            const saved = localStorage.getItem('drive_settings');
+            if (saved) {
+                const settings = JSON.parse(saved);
+                autoProcessEnabled = settings.autoProcessEnabled || false;
+                document.getElementById('driveFolderPath').value = settings.folderPath || '/Reuniões-AI/Transcrições/2026';
+                document.getElementById('syncInterval').value = settings.syncInterval || '300';
+                
+                if (autoProcessEnabled) {
+                    document.getElementById('autoProcessToggle').classList.add('active');
+                }
+            }
+
+            // Load notes
+            userNotes = localStorage.getItem('executive_notes') || '';
+            document.getElementById('notesArea').value = userNotes;
+        }
+
+        function setupNotesAutoSave() {
+            document.getElementById('notesArea').addEventListener('input', (e) => {
+                userNotes = e.target.value;
+                localStorage.setItem('executive_notes', userNotes);
+            });
+        }
+
+        // UI Helpers
+        function showLoading(message) {
+            const overlay = document.createElement('div');
+            overlay.id = 'loadingOverlay';
+            overlay.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.95); z-index: 9999; display: flex; align-items: center; justify-content: center;">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <div style="font-size: 1.1rem; color: var(--text);">${message}</div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        }
+
+        function hideLoading() {
+            const overlay = document.getElementById('loadingOverlay');
+            if (overlay) overlay.remove();
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease-out reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            stopAutoSync();
+        });
+
+        // Update sync interval when changed
+        document.getElementById('syncInterval').addEventListener('change', () => {
+            if (autoProcessEnabled && driveConnected) {
+                startAutoSync();
+            }
+            saveSettings();
+        });
+    </script>
+</body>
+</html>
