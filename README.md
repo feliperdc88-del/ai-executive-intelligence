@@ -2,7 +2,7 @@
 
 > Sistema de agentes de IA autônomos para análise de reuniões com sincronização automática ao Google Drive
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/SEU-USUARIO/ai-executive-intelligence)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/feliperdc88-del/ai-executive-intelligence)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 📖 Sobre
