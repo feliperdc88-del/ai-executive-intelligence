@@ -1,27 +1,16 @@
 {
   "version": 2,
-  "public": true,
   "builds": [
     {
       "src": "index.html",
       "use": "@vercel/static"
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        }
-      ]
-    }
   ]
 }
+```
+
+5. **Scroll até o fim** da página
+
+6. No campo "Commit message" deixe:
+```
+   Fix vercel.json - remove conflicting config
