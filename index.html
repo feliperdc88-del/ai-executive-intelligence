@@ -640,7 +640,67 @@
                     <h2 class="card-title">🔑 Claude API</h2>
                     <span class="badge badge-warning">Configuração</span>
                 </div>
-
+<!-- Upload Section -->
+<div class="card" style="margin-top: 2rem;">
+    <div class="card-header">
+        <h2 style="display: flex; align-items: center; gap: 0.5rem;">
+            📤 Upload de Transcrições
+        </h2>
+        <p style="color: var(--text-muted); margin-top: 0.5rem; font-size: 0.9rem;">
+            Arraste arquivos ou clique para selecionar • Formato: DD/MM/AAAA - Assunto - Nome
+        </p>
+    </div>
+    
+    <div style="margin-top: 1.5rem;">
+        <div id="uploadDropZone" style="
+            border: 2px dashed #334155;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(59, 130, 246, 0.05);
+        ">
+            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.7;">📁</div>
+            <div style="font-size: 1.1rem; color: #F8FAFC; margin-bottom: 0.5rem; font-weight: 500;">
+                Arraste arquivos aqui ou clique para selecionar
+            </div>
+            <div style="font-size: 0.85rem; color: #94A3B8;">
+                Formatos aceitos: .txt, .md
+            </div>
+            <input 
+                type="file" 
+                id="uploadFileInput" 
+                multiple 
+                accept=".txt,.md" 
+                style="display: none"
+            >
+        </div>
+        
+        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(15, 23, 42, 0.5); border-radius: 8px; border-left: 3px solid #3B82F6;">
+            <strong>📝 Padrão do nome:</strong> 
+            <code style="background: rgba(59, 130, 246, 0.15); padding: 0.2rem 0.5rem; border-radius: 4px;">DD/MM/AAAA - Assunto - Nome da reunião</code>
+            <div style="margin-top: 0.5rem; font-size: 0.85rem; color: #94A3B8;">
+                Exemplos:
+                <ul style="margin: 0.5rem 0 0 1.25rem; line-height: 1.8;">
+                    <li>14/02/2026 - CX - Review NPS.txt</li>
+                    <li>15/02/2026 - Pagamentos - Sprint.txt</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="uploadedFilesList" style="margin-top: 1.5rem;"></div>
+        
+        <div id="uploadProcessSection" style="display: none; margin-top: 1.5rem; display: flex; gap: 1rem; justify-content: flex-end;">
+            <button class="btn" onclick="clearUploads()" style="background: #1E293B; color: #94A3B8;">
+                Limpar
+            </button>
+            <button class="btn btn-primary" onclick="processUploadedFiles()">
+                🚀 Processar Todos (<span id="uploadValidCount">0</span>)
+            </button>
+        </div>
+    </div>
+</div>
                 <div class="form-group">
                     <label class="form-label">API Key</label>
                     <input 
@@ -1362,6 +1422,119 @@
             }
             saveSettings();
         });
+        // ===== UPLOAD FEATURE =====
+const uploadState = { files: [], processing: false };
+
+function parseFilename(filename) {
+    const nameWithoutExt = filename.replace(/\.(txt|md)$/i, '');
+    const pattern = /^(\d{2})\/(\d{2})\/(\d{4})\s*-\s*([^-]+)\s*-\s*(.+)$/;
+    const match = nameWithoutExt.match(pattern);
+    if (!match) return null;
+    return {
+        date: `${match[1]}/${match[2]}/${match[3]}`,
+        subject: match[4].trim(),
+        title: match[5].trim(),
+        valid: true
+    };
+}
+
+function detectThemeFromSubject(subject) {
+    const s = subject.toLowerCase();
+    if (s.includes('cx') || s.includes('customer')) return 'cx';
+    if (s.includes('pagamento') || s.includes('payment')) return 'pagamentos';
+    if (s.includes('startse')) return 'startse';
+    if (s.includes('negocio') || s.includes('pipeline')) return 'negocios';
+    if (s.includes('carreira') || s.includes('1-1')) return 'carreira';
+    return 'estrategia';
+}
+
+async function handleUploadedFiles(files) {
+    for (const file of files) {
+        if (!file.name.match(/\.(txt|md)$/i)) continue;
+        const parsed = parseFilename(file.name);
+        if (!parsed) {
+            showToast(`❌ ${file.name}: Nome inválido`, 'error');
+            continue;
+        }
+        const theme = detectThemeFromSubject(parsed.subject);
+        const content = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.readAsText(file);
+        });
+        uploadState.files.push({ file, name: file.name, parsed, theme, content, valid: true, processed: false });
+    }
+    displayUploadedFiles();
+    showToast(`✅ ${uploadState.files.filter(f => f.valid).length} arquivo(s) detectado(s)`, 'success');
+}
+
+function displayUploadedFiles() {
+    const container = document.getElementById('uploadedFilesList');
+    const processSection = document.getElementById('uploadProcessSection');
+    const validCountSpan = document.getElementById('uploadValidCount');
+    if (!container) return;
+    const validFiles = uploadState.files.filter(f => f.valid && !f.processed);
+    validCountSpan.textContent = validFiles.length;
+    processSection.style.display = validFiles.length > 0 ? 'flex' : 'none';
+    container.innerHTML = uploadState.files.map(f => `
+        <div style="background: #1E293B; border: 1px solid #334155; border-left: 3px solid ${f.valid ? '#10B981' : '#EF4444'}; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem;">
+            <div style="font-weight: 600; margin-bottom: 0.4rem;">${f.processed ? '✅' : '⏳'} ${f.name}</div>
+            ${f.valid ? `
+                <div style="font-size: 0.85rem; color: #94A3B8;">
+                    📅 ${f.parsed.date} • 📁 ${f.parsed.subject} • 📝 ${f.parsed.title}
+                </div>
+                <span style="display: inline-block; margin-top: 0.5rem; padding: 0.25rem 0.75rem; background: rgba(59, 130, 246, 0.2); color: #60A5FA; border-radius: 12px; font-size: 0.75rem;">
+                    ${f.theme.toUpperCase()}
+                </span>
+            ` : ''}
+        </div>
+    `).join('');
+}
+
+function clearUploads() {
+    if (confirm(`Remover ${uploadState.files.length} arquivo(s)?`)) {
+        uploadState.files = [];
+        displayUploadedFiles();
+    }
+}
+
+async function processUploadedFiles() {
+    const validFiles = uploadState.files.filter(f => f.valid && !f.processed);
+    if (!apiKey) { showToast('Configure Claude API Key!', 'error'); return; }
+    if (validFiles.length === 0) return;
+    showToast(`🔄 Processando ${validFiles.length} arquivo(s)...`, 'info');
+    const filesByTheme = {};
+    validFiles.forEach(f => {
+        if (!filesByTheme[f.theme]) filesByTheme[f.theme] = [];
+        filesByTheme[f.theme].push({ name: f.name, date: f.parsed.date, content: f.content });
+    });
+    for (const [theme, files] of Object.entries(filesByTheme)) {
+        const transcripts = files.map(f => `=== ${f.name} ===\n${f.content}`).join('\n\n---\n\n');
+        await processTranscriptsForTheme(theme, [{ name: files[0].name, content: transcripts }]);
+    }
+    validFiles.forEach(f => f.processed = true);
+    displayUploadedFiles();
+    displayInsights();
+    showToast(`✅ Processado!`, 'success');
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const dropZone = document.getElementById('uploadDropZone');
+    const fileInput = document.getElementById('uploadFileInput');
+    if (!dropZone || !fileInput) return;
+    dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.style.borderColor = '#60A5FA'; });
+    dropZone.addEventListener('dragleave', () => { dropZone.style.borderColor = '#334155'; });
+    dropZone.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = '#334155';
+        await handleUploadedFiles(Array.from(e.dataTransfer.files));
+    });
+    dropZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', async (e) => {
+        await handleUploadedFiles(Array.from(e.target.files));
+        e.target.value = '';
+    });
+});
     </script>
 </body>
 </html>
